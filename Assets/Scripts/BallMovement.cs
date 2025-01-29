@@ -2,44 +2,60 @@ using UnityEngine;
 
 public class BallMovement : MonoBehaviour
 {
-    public float ballSpeed = 5f;
     private Rigidbody2D rBody;
-    private Vector2 currentVelocity;
+
+    private const string PlayerTag = "Player";
+    private const string Player1GoalTag = "Player1Goal";
+    private const string Player2GoalTag = "Player2Goal";
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         rBody = GetComponent<Rigidbody2D>();
-        ResetBall();
+        GameManager.Instance.ResetBall();
     }
 
     void OnCollisionEnter2D(Collision2D other)
     {
-        if(other.gameObject.CompareTag("Player"))
+        if (other.gameObject.CompareTag(PlayerTag))
         {
-            // Colliding with a paddle (or player)
-            currentVelocity = new Vector2(currentVelocity.x * -1, currentVelocity.y);
+            HandlePlayerCollision(other);
         }
-        else if(other.gameObject.CompareTag("Goals"))
+        else if (other.gameObject.CompareTag(Player1GoalTag) || other.gameObject.CompareTag(Player2GoalTag))
         {
-            // Reset the ball to the middle
-            ResetBall();
-            // Score a point for the appropriate side.
+            HandleGoalCollision(other);
         }
         else
         {
-            currentVelocity = new Vector2(currentVelocity.x, currentVelocity.y * -1);
+            HandleWallCollision();
         }
 
-        rBody.linearVelocity = currentVelocity;
+        rBody.linearVelocity = GameManager.Instance.GetCurrentVelocity();
     }
 
-    private void ResetBall()
+    private void HandlePlayerCollision(Collision2D other)
     {
-        transform.position = Vector2.zero;
-        float randX = Random.Range(-1, 1);
-        float randY = Random.Range(-1, 1);
-        rBody.linearVelocity = new Vector2(randX, randY) * ballSpeed;
-        currentVelocity = rBody.linearVelocity;
+        Vector2 currentVelocity = GameManager.Instance.GetCurrentVelocity();
+        currentVelocity = new Vector2(currentVelocity.x * -1, currentVelocity.y);
+        GameManager.Instance.SetCurrentVelocity(currentVelocity);
+    }
+
+    private void HandleGoalCollision(Collision2D other)
+    {
+        if (other.gameObject.CompareTag(Player1GoalTag))
+        {
+            GameManager.Instance.AddScore(Player.Player2);
+        }
+        else if (other.gameObject.CompareTag(Player2GoalTag))
+        {
+            GameManager.Instance.AddScore(Player.Player1);
+        }
+    }
+
+    private void HandleWallCollision()
+    {
+        Vector2 currentVelocity = GameManager.Instance.GetCurrentVelocity();
+        currentVelocity = new Vector2(currentVelocity.x, currentVelocity.y * -1);
+        GameManager.Instance.SetCurrentVelocity(currentVelocity);
     }
 }

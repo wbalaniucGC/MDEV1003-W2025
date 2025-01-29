@@ -208,8 +208,8 @@ GameObject:
   - component: {fileID: 152799689}
   - component: {fileID: 152799690}
   m_Layer: 0
-  m_Name: Boundary_Left
-  m_TagString: Goals
+  m_Name: Player 1 Goal
+  m_TagString: Player1Goal
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -286,8 +286,8 @@ GameObject:
   - component: {fileID: 324268713}
   - component: {fileID: 324268714}
   m_Layer: 0
-  m_Name: Boundary_Right
-  m_TagString: Goals
+  m_Name: Player 2 Goal
+  m_TagString: Player2Goal
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -553,7 +553,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9d8939d21885b14ebd6fb3236e218b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ballSpeed: 3
 --- !u!1 &1496942734
 GameObject:
   m_ObjectHideFlags: 0

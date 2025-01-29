@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour
     // Inspector Variables - Ball
     [SerializeField] private Rigidbody2D ballRigidbody;
     [SerializeField] private float ballSpeed = 5f;
+    [SerializeField] private int winScore = 2;
 
     private Vector2 currentVelocity;
 
@@ -46,26 +47,43 @@ public class GameManager : MonoBehaviour
         if (player == Player.Player1)
         {
             player1Score++;
+            UIManager.Instance.UpdateScore(Player.Player1, player1Score);
+            if(player1Score >= winScore)
+            {
+                UIManager.Instance.DisplayWinMessage(Player.Player1);
+                StopGame();
+                return;
+            }
         }
         else if (player == Player.Player2)
         {
             player2Score++;
+            UIManager.Instance.UpdateScore(Player.Player2, player2Score);
+            if (player2Score >= winScore)
+            {
+                UIManager.Instance.DisplayWinMessage(Player.Player2);
+                StopGame();
+                return;
+            }
         }
-        DisplayScores();
+        // DisplayScores();
         ResetBall();
     }
-
+    /*
     private void DisplayScores()
     {
         Debug.Log($"Player 1: {player1Score} - Player 2: {player2Score}");
     }
+    */
 
     public void ResetGame()
     {
         player1Score = 0;
         player2Score = 0;
-        DisplayScores();
+        UIManager.Instance.UpdateScore(Player.Player1, player1Score);
+        UIManager.Instance.UpdateScore(Player.Player2, player2Score);   
         ResetBall();
+        Time.timeScale = 1;
     }
 
     public void ResetBall()
@@ -90,5 +108,10 @@ public class GameManager : MonoBehaviour
     public void SetCurrentVelocity(Vector2 velocity)
     {
         currentVelocity = velocity;
+    }
+
+    private void StopGame()
+    {
+        Time.timeScale = 0; // Pause the game
     }
 }

@@ -36,7 +36,8 @@ public class BallMovement : MonoBehaviour
     private void HandlePlayerCollision(Collision2D other)
     {
         Vector2 currentVelocity = GameManager.Instance.GetCurrentVelocity();
-        currentVelocity = new Vector2(currentVelocity.x * -1, currentVelocity.y);
+        float y = CalculateBounceAngle(transform.position, other.transform.position, other.collider.bounds.size.y);
+        currentVelocity = new Vector2(currentVelocity.x * -1, y).normalized * GameManager.Instance.GetBallSpeed();
         GameManager.Instance.SetCurrentVelocity(currentVelocity);
     }
 
@@ -57,5 +58,10 @@ public class BallMovement : MonoBehaviour
         Vector2 currentVelocity = GameManager.Instance.GetCurrentVelocity();
         currentVelocity = new Vector2(currentVelocity.x, currentVelocity.y * -1);
         GameManager.Instance.SetCurrentVelocity(currentVelocity);
+    }
+
+    private float CalculateBounceAngle(Vector2 ballPos, Vector2 paddlePos, float paddleHeight)
+    {
+        return (ballPos.y - paddlePos.y) / paddleHeight * 3f; // Adjust the multiplier for desired bounce effect
     }
 }

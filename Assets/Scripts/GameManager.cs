@@ -110,6 +110,11 @@ public class GameManager : MonoBehaviour
         currentVelocity = velocity;
     }
 
+    public float GetBallSpeed()
+    {
+        return ballSpeed;
+    }
+
     private void StopGame()
     {
         Time.timeScale = 0; // Pause the game

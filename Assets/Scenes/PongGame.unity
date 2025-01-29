@@ -1050,7 +1050,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1496942734}
-  m_BodyType: 0
+  m_BodyType: 1
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -1082,7 +1082,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 10
-  paddleInputString: PaddleRight
+  inputAxis: PaddleRight
 --- !u!212 &1496942737
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1232,7 +1232,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 10
-  paddleInputString: PaddleLeft
+  inputAxis: PaddleLeft
 --- !u!212 &1663301326
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1311,7 +1311,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1663301324}
-  m_BodyType: 0
+  m_BodyType: 1
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -1622,6 +1622,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ballRigidbody: {fileID: 1166297244}
   ballSpeed: 5
+  winScore: 10
 --- !u!4 &1948890589
 Transform:
   m_ObjectHideFlags: 0

@@ -2,40 +2,18 @@ using UnityEngine;
 
 public class PaddleMovement : MonoBehaviour
 {
-    public float moveSpeed = 10f;  
-    public string paddleInputString = "PaddleLeft";
-    
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    public float moveSpeed = 10f;
+    public string inputAxis;
+
 
     // Update is called once per frame
     void Update()
     {
-        // Option 1: Fallback option for input handling
-        /*
-        if(Input.GetKey(KeyCode.W))
-        {
-            // Execute when player pressed the W key
-            Debug.Log("I am pressing the W key");
-        }
-        if(Input.GetKey(KeyCode.S))
-        {
-            // Execute when player pressed the S key
-            Debug.Log("I am pressing the S key.");
-        }
-        */
+        float move = Input.GetAxis(inputAxis) * moveSpeed * Time.deltaTime;
+        transform.Translate(0, move, 0);
 
-
-        
-        // Option 2: Using Unity Input Manager
-        float verticalInput = Input.GetAxis(paddleInputString); // A value between -1 and +1
-        transform.Translate(Vector2.up * verticalInput * moveSpeed * Time.deltaTime);
-
-        // Move my object on the Y-axis (up) based on the verticalInput value.
-
-        
+        // Clamp the paddle's position to stay within the screen bounds
+        float campedY = Mathf.Clamp(transform.position.y, -4.5f, 4.5f);
+        transform.position = new Vector3(transform.position.x, campedY, transform.position.z);
     }
 }

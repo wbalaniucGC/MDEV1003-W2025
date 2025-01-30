@@ -2,44 +2,75 @@ using UnityEngine;
 
 public class BallMovement : MonoBehaviour
 {
-    public float ballSpeed = 5f;
-    private Rigidbody2D rBody;
-    private Vector2 currentVelocity;
+    // Ball Movement Script will trigger Scoring functions as it hits a goal
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    // Const Strings
+    private const string PlayerTag = "Player";
+    private const string Player1GoalTag = "Player1Goal";
+    private const string Player2GoalTag = "Player2Goal";
+
+    // Private Variables
+    private Rigidbody2D rBody;
+
+    private void Start()
     {
         rBody = GetComponent<Rigidbody2D>();
-        ResetBall();
     }
 
     void OnCollisionEnter2D(Collision2D other)
     {
-        if(other.gameObject.CompareTag("Player"))
+        if(other.gameObject.CompareTag(PlayerTag))
         {
-            // Colliding with a paddle (or player)
-            currentVelocity = new Vector2(currentVelocity.x * -1, currentVelocity.y);
+            HandlePlayerCollision(other);
         }
-        else if(other.gameObject.CompareTag("Goals"))
+        else if(other.gameObject.CompareTag(Player1GoalTag))
         {
-            // Reset the ball to the middle
-            ResetBall();
-            // Score a point for the appropriate side.
+            // Player 2 Scores!
+            HandlePlayer1GoalCollision();
+        }
+        else if(other.gameObject.CompareTag(Player2GoalTag))
+        {
+            // Player 1 Score!
+            HandlePlayer2GoalCollision();
         }
         else
         {
-            currentVelocity = new Vector2(currentVelocity.x, currentVelocity.y * -1);
+            HandleCeilingFloorCollision();
         }
-
-        rBody.linearVelocity = currentVelocity;
     }
 
-    private void ResetBall()
+    private void HandlePlayerCollision(Collision2D other)
     {
-        transform.position = Vector2.zero;
-        float randX = Random.Range(-1, 1);
-        float randY = Random.Range(-1, 1);
-        rBody.linearVelocity = new Vector2(randX, randY) * ballSpeed;
-        currentVelocity = rBody.linearVelocity;
+        Vector2 currentVelocity = GameManager.Instance.GetCurrentVelocity();
+        // currentVelocity = new Vector2(currentVelocity.x * -1, currentVelocity.y);
+        float y = CalculateBounceAngle(transform.position, other.transform.position, other.collider.bounds.size.y);
+        currentVelocity = new Vector2(currentVelocity.x * -1, y).normalized * GameManager.Instance.ballSpeed;
+        // Calculate bounce angle
+
+        GameManager.Instance.SetCurrentVelocity(currentVelocity);
+    }
+
+    private void HandlePlayer1GoalCollision()
+    {
+        // We have no scoring logic! Who handles scoring logic?
+        // A: GameManager!
+        GameManager.Instance.AddScore(Player.Player2);
+    }
+
+    private void HandlePlayer2GoalCollision()
+    {
+        GameManager.Instance.AddScore(Player.Player1);
+    }
+
+    private void HandleCeilingFloorCollision()
+    {
+        Vector2 currentVelocity = GameManager.Instance.GetCurrentVelocity();
+        currentVelocity = new Vector2(currentVelocity.x, currentVelocity.y * -1);
+        GameManager.Instance.SetCurrentVelocity(currentVelocity);
+    }
+
+    private float CalculateBounceAngle(Vector2 ballPos, Vector2 paddlePos, float paddleHeight)
+    {
+        return (ballPos.y - paddlePos.y) / paddleHeight * 7f;
     }
 }
